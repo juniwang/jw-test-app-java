@@ -1,0 +1,7 @@
+/target/
+/work
+
+nbactions*.xml
+.idea/
+out/
+*.iml
