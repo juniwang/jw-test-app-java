@@ -11,6 +11,6 @@ public class App {
     }
 
     static void testAppServiceCreate() {
-        JAppService.createWebApp();
+        JAppService.getDeploymentSiteInner();
     }
 }

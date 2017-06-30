@@ -17,11 +17,12 @@ package com.juniwang.msazure;
 
 import com.juniwang.Utils;
 import com.microsoft.azure.management.Azure;
-import com.microsoft.azure.management.appservice.AppServicePlan;
-import com.microsoft.azure.management.appservice.OperatingSystem;
-import com.microsoft.azure.management.appservice.PricingTier;
-import com.microsoft.azure.management.appservice.WebApp;
+import com.microsoft.azure.management.appservice.*;
+import com.microsoft.azure.management.appservice.implementation.SiteConfigResourceInner;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JAppService {
 
@@ -54,10 +55,42 @@ public class JAppService {
         System.out.println(webApp.name());
         System.out.println(webApp.id());
 
+        DeploymentSlot deploymentSlot = webApp.deploymentSlots().define("staging")
+                .withConfigurationFromWebApp(webApp)
+                .create();
+        System.out.println(deploymentSlot.id());
+
         azure.resourceGroups().deleteByName(resourceGroupName);
-        // create resource group
-//        final ResourceGroup resourceGroup = azure.resourceGroups().define(resourceGroupName)
-//                .withRegion(Region.AUSTRALIA_EAST)
-//                .create();
+    }
+
+    public static void getDeploymentSiteInner() {
+        final Azure azure = AzureUtils.getAzureClient();
+        WebApp webApp = azure.webApps().getByResourceGroup("jw-webapp-linux-tomcat-05", "jw-webapp-linux-tomcat-05");
+        Utils.checkNotNull(webApp, "");
+
+        DeploymentSlot slot = webApp.deploymentSlots().getByName("testing");
+        Utils.checkNotNull(slot, "");
+
+        SiteConfigResourceInner siteConfigResourceInner = azure.webApps().inner().getConfigurationSlot(slot.resourceGroupName(), webApp.name(), slot.name());
+        Utils.checkNotNull(siteConfigResourceInner, "");
+
+        List<NameValuePair> appSettings = new ArrayList<NameValuePair>();
+        appSettings.add(new NameValuePair().withName("DOCKER_CUSTOM_IMAGE_NAME").withValue("jwregistry001.azurecr.io/nginx"));
+        appSettings.add(new NameValuePair().withName("DOCKER_REGISTRY_SERVER_URL").withValue("http://jwregistry001.azurecr.io"));
+        appSettings.add(new NameValuePair().withName("DOCKER_REGISTRY_SERVER_USERNAME").withValue("jwregistry001"));
+        appSettings.add(new NameValuePair().withName("DOCKER_REGISTRY_SERVER_PASSWORD").withValue(""));
+        siteConfigResourceInner.withLinuxFxVersion("DOCKER|jwregistry001.azurecr.io/nginx");
+        siteConfigResourceInner.withAppSettings(appSettings);
+        azure.webApps().inner().updateConfigurationSlot(webApp.resourceGroupName(), webApp.name(), slot.name(), siteConfigResourceInner);
+
+//        DeploymentSlot.Update update = slot.update();
+//        SiteConfig siteConfig = new SiteConfig().withLinuxFxVersion("DOCKER|jwregistry001.azurecr.io/jwregistry001/tomcat8-sshd:5");
+//        slot.inner().withSiteConfig(siteConfig).withKind("app");
+//        update.withAppSetting("DOCKER_CUSTOM_IMAGE_NAME", "jwregistry001.azurecr.io/jwregistry001/tomcat8-sshd:5");
+//        update.withAppSetting("DOCKER_REGISTRY_SERVER_URL", "http://jwregistry001.azurecr.io");
+//        update.withAppSetting("DOCKER_REGISTRY_SERVER_USERNAME", "jwregistry001");
+//        update.withAppSetting("DOCKER_REGISTRY_SERVER_PASSWORD", "/F/t7lRxG+=VlcSsil+pgoC1w9Sc5hIe");
+//        slot.inner().siteConfig();
+//        update.apply();
     }
 }
