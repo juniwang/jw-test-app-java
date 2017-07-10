@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Editor-specific files
 *.swp
 *.swo
@@ -106,3 +107,12 @@ gradlew.bat
 
 # Mac OSX
 .DS_Store
+=======
+/target/
+/work
+
+nbactions*.xml
+.idea/
+out/
+*.iml
+>>>>>>> 8bdb471e0cfe1f432b7249a3b4b8ae46291b2746
