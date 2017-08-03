@@ -1,5 +1,4 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-<<<<<<< HEAD
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.juniwang</groupId>
@@ -11,7 +10,17 @@
 
     <properties>
         <azuresdk.version>1.1.0</azuresdk.version>
+        <instrkey>712adcab-2593-48c6-8367-8a940f483bc1</instrkey>
     </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
     <developers>
         <developer>
@@ -29,6 +38,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-web</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
             <!-- use latest version https://github.com/docker-java/docker-java/releases -->
@@ -42,25 +57,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-=======
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.microsoft.jenkinsci</groupId>
-  <artifactId>jw-java-helloworld</artifactId>
-  <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>jw-java-helloworld Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <finalName>jw-java-helloworld</finalName>
-  </build>
->>>>>>> 8bdb471e0cfe1f432b7249a3b4b8ae46291b2746
 </project>
